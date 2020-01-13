@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Job
   attr_accessor :title, :description, :requirement, :company_name, :accept_gender
 

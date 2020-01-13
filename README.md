@@ -18,6 +18,7 @@
 - [Getting Started](#getting-started)
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
+- [Unit Testing](#unittesting)
 - [Usage](#usage)
 - [Contributing](#contributing)
 - [License](#license)
@@ -28,7 +29,7 @@
 
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
+[[product-screenshot]](https://drive.google.com/file/d/1BiyjkW26crRbp1rrt2InRIPAJJzIl0UK/view?usp=sharing)
 
 This is capstone project of Microverse Ruby Curriculum.Project Name is **Console Jobs**.
 Web scraping is the process of gathering information from the Internet. Even copy-pasting the lyrics of your favorite song is a form of web scraping! However, the words “web scraping” usually refer to a process that involves automation.
@@ -90,13 +91,8 @@ gem install
 ruby bin/main.rb
 ```
 
-<!-- USAGE EXAMPLES -->
+## Unit Testing
 
-## Usage
-
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
-
-_For more examples, please refer to the [Documentation](https://example.com)_
 
 <!-- CONTRIBUTING -->
 

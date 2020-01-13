@@ -3,7 +3,7 @@
 require "open-uri"
 
 class JobUrl
-  attr_accessor :url, :doc
+  attr_accessor :url
 
   def initialize(url)
     @url = url

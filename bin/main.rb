@@ -36,17 +36,23 @@ puts "
 position_data.each_with_index do |positionRow, index|
   posTitle = positionRow.inner_html
   positionValue = positionRow.attributes["value"].value
-  if index > 0
+  if index > 0 && index < 25
     positionList << Position.new(posTitle, positionValue)
     puts "#{index} | #{posTitle}"
   end
-  sleep 1 # second
+  sleep (1.0 / 12.0)
 end
 
-puts "Choose Above Position :".red
-positionValue = gets
+positionValue = nil
+until (positionValue != nil) && (positionValue.is_a? Integer)
+  puts "Enter No: to choose your position :".red
+  positionValue = gets
+end
 
-posValue = positionList[positionValue.to_i - 1].position
+pos = positionList[positionValue.to_i - 1]
+posValue = pos.position
+posName = pos.name
+
 jobUrl = "https://www.jobnet.com.mm/jobs-in-myanmar?jobfunction=#{posValue}"
 job_document = open(jobUrl)
 job_content = job_document.read
@@ -55,7 +61,7 @@ job_data = Nokogiri::HTML(job_content).css(".serp-results-items-wrapper").css(".
 
 puts "
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-  +                 Job List                                          +  
+  +                 Job List for #{posName}          +  
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
 ".yellow
 
@@ -70,10 +76,11 @@ job_data.each_with_index do |job, index|
   puts "#{index + 1} | #{jobTitle}"
   puts "(#{jobDate})"
   puts "--------------------------------------"
-  sleep 1 # second
+  sleep (1.0 / 12.0)
 end
 
-puts "Choose Your Interest Job".red
+# puts "Enter 0 for go back :".red
+puts "Enter No: for your Interest Job :".red
 jobValue = gets
 
 link = jobDetailUrlList[jobValue.to_i - 1]

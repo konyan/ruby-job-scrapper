@@ -1,7 +1,8 @@
 class Position
-  attr_accessor :name, :positions
+  attr_accessor :name, :position
 
-  def initialize(name)
+  def initialize(name, position)
     @name = name
+    @position = position
   end
 end

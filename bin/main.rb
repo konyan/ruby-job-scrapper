@@ -1,6 +1,24 @@
 require "open-uri"
 require "nokogiri"
 require "./lib/position"
+require "colorize"
+
+positionList = Array.new
+jobDetailUrlList = Array.new
+
+puts "
+:......::::.......:::..::::..:::......::::.......:::........::........::::::......::::.......:::........::::......:::
+:......::::.......:::..::::..:::......::::.......:::........::........::::::......::::.......:::........::::......:::
+:'######:::'#######::'##::: ##::'######:::'#######::'##:::::::'########::::::::::'##::'#######::'########:::'######::
+'##... ##:'##.... ##: ###:: ##:'##... ##:'##.... ##: ##::::::: ##.....::::::::::: ##:'##.... ##: ##.... ##:'##... ##:
+ ##:::..:: ##:::: ##: ####: ##: ##:::..:: ##:::: ##: ##::::::: ##:::::::::::::::: ##: ##:::: ##: ##:::: ##: ##:::..::
+ ##::::::: ##:::: ##: ## ## ##:. ######:: ##:::: ##: ##::::::: ######:::::::::::: ##: ##:::: ##: ########::. ######::
+ ##::::::: ##:::: ##: ##. ####::..... ##: ##:::: ##: ##::::::: ##...:::::::'##::: ##: ##:::: ##: ##.... ##::..... ##:
+ ##::: ##: ##:::: ##: ##:. ###:'##::: ##: ##:::: ##: ##::::::: ##:::::::::: ##::: ##: ##:::: ##: ##:::: ##:'##::: ##:
+. ######::. #######:: ##::. ##:. ######::. #######:: ########: ########::::. ######::. #######:: ########::. ######::
+:......::::.......:::..::::..:::......::::.......:::........::........::::::......::::.......:::........::::......:::
+:......::::.......:::..::::..:::......::::.......:::........::........::::::......::::.......:::........::::......:::
+".yellow
 
 positionUrl = "https://www.jobnet.com.mm/jobs-in-myanmar"
 
@@ -9,50 +27,85 @@ content = document.read
 position_data = Nokogiri::HTML(content).css(".hero-wrapper").css(".select-wrapper").first
   .css("option")
 
-positionList = Array.new
-jobDetailUrlList = Array.new
+puts "
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
++                 Job Position List                                 +  
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+".yellow
+
+position_data.each_with_index do |positionRow, index|
+  posTitle = positionRow.inner_html
+  positionValue = positionRow.attributes["value"].value
+  if index > 0
+    positionList << Position.new(posTitle, positionValue)
+    puts "#{index} | #{posTitle}"
+  end
+  sleep 1 # second
+end
+
+puts "Choose Above Position :".red
+positionValue = gets
+
+posValue = positionList[positionValue.to_i - 1].position
+jobUrl = "https://www.jobnet.com.mm/jobs-in-myanmar?jobfunction=#{posValue}"
+job_document = open(jobUrl)
+job_content = job_document.read
+job_data = Nokogiri::HTML(job_content).css(".serp-results-items-wrapper").css(".serp-results-items")
+  .css(".serp-item")
 
 puts "
-+-+-+-+-+ +-+-+-+ +-+-+-+-+-+-+-+-+
-|J|o|b|s| |W|e|b| |S|c|r|a|p|p|e|r|
-+-+-+-+-+ +-+-+-+ +-+-+-+-+-+-+-+-+
-"
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+  +                 Job List                                          +  
+  +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+".yellow
 
-# position_data.each_with_index do |positionRow, index|
-#   posTitle = positionRow.inner_html
-#   if index > 0
-#     positionList << Position.new(posTitle)
-#     puts "#{index} | #{jobTitle}"
-#   end
-# end
+job_data.each_with_index do |job, index|
+  jobTitle = job.css("h2").css("a").inner_html.strip
+  jobCompanyName = job.css("h3").css("a").inner_html.strip
+  jobDate = job.css(".item-footer").css(".posted-date").css("span").inner_html.strip
+  jobDetailUrl = job.css(".item-footer").css(".view").css("a").first.attributes["href"].value
 
-# puts "Choose Above Position"
-# positionValue = gets
+  jobDetailUrlList << jobDetailUrl
 
-# jobUrl = "https://www.jobnet.com.mm/jobs-in-myanmar?jobfunction=#{positionValue}"
-# job_document = open(jobUrl)
-# job_content = job_document.read
-# job_data = Nokogiri::HTML(job_content).css(".serp-results-items-wrapper").css(".serp-results-items")
-#   .css(".serp-item")
+  puts "#{index + 1} | #{jobTitle}"
+  puts "(#{jobDate})"
+  puts "--------------------------------------"
+  sleep 1 # second
+end
 
-# job_data.each_with_index do |job, index|
-#   jobTitle = job.css("h2").css("a").inner_html.strip
-#   jobCompanyName = job.css("h3").css("a").inner_html.strip
-#   jobDate = job.css(".item-footer").css(".posted-date").css("span").inner_html.strip
-#   jobDetailUrl = job.css(".item-footer").css(".view").css("a").first.attributes["href"].value
-
-#   jobDetailUrlList << jobDetailUrl
-
-#   puts "#{index + 1} | #{jobTitle}"
-#   puts "(#{jobDate})"
-#   puts "--------------------------------------"
-# end
-
-puts "Choose Your Interest Job"
+puts "Choose Your Interest Job".red
 jobValue = gets
 
 link = jobDetailUrlList[jobValue.to_i - 1]
-puts link
-
 jobDetailUrl = "https://www.jobnet.com.mm/#{link}"
-puts jobDetailUrl
+detail_document = open(jobDetailUrl).read
+detail_data = Nokogiri::HTML(detail_document).css(".content-sidebar-wrapper")
+  .css(".content-wrapper")
+
+jobTitle = detail_data.css(".job-info-wrapper").css(".job-detail-header")
+  .css("h1").inner_html
+jobCompany = detail_data.css(".job-info-wrapper").css(".job-detail-header")
+  .css("h2").css("a").css("span").inner_html
+postedDate = detail_data.css(".job-info-wrapper").css(".footer")
+  .css(".post-date")
+jobDescription = detail_data.css(".job-description-wrapper").css(".description-item").first.css("div").css("p").inner_html.strip
+jobRequirement = detail_data.css(".job-description-wrapper").css(".description-item:nth-child(3)").css("p").inner_html.strip
+
+puts "
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+                    #{jobTitle}                                
+                   (#{jobCompany})
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+".yellow
+
+puts "
+Job Description
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+#{jobDescription.gsub(/<br\s*\/?>/, "\n").gsub(/•\s*/, "• ")}
+"
+
+puts "
+Job Requirements
++-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+#{jobRequirement.gsub(/<br\s*\/?>/, "\n").gsub(/\s*/, " ")}
+"

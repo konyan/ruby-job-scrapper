@@ -1,7 +1,9 @@
 require "open-uri"
 require "nokogiri"
-require "./lib/position"
 require "colorize"
+require "./lib/position"
+require "./lib/job"
+require "./lib/joburl"
 
 positionList = Array.new
 jobDetailUrlList = Array.new
@@ -23,10 +25,9 @@ puts "
 running = true
 
 while running
-  positionUrl = "https://www.jobnet.com.mm/jobs-in-myanmar"
-  document = open(positionUrl)
-  content = document.read
-  position_data = Nokogiri::HTML(content).css(".hero-wrapper").css(".select-wrapper").first
+  positionJobUrl = JobUrl.new("https://www.jobnet.com.mm/jobs-in-myanmar")
+  document = positionJobUrl.url_to_document
+  position_data = Nokogiri::HTML(document).css(".hero-wrapper").css(".select-wrapper").first
     .css("option")
 
   puts "
@@ -60,9 +61,8 @@ while running
   posValue = pos.position
   posName = pos.name
 
-  jobUrl = "https://www.jobnet.com.mm/jobs-in-myanmar?jobfunction=#{posValue}"
-  job_document = open(jobUrl)
-  job_content = job_document.read
+  jobUrl = JobUrl.new("https://www.jobnet.com.mm/jobs-in-myanmar?jobfunction=#{posValue}")
+  job_content = jobUrl.url_to_document
   job_data = Nokogiri::HTML(job_content).css(".serp-results-items-wrapper").css(".serp-results-items")
     .css(".serp-item")
 
@@ -91,8 +91,9 @@ while running
   jobValue = gets
 
   link = jobDetailUrlList[jobValue.to_i - 1]
-  jobDetailUrl = "https://www.jobnet.com.mm/#{link}"
-  detail_document = open(jobDetailUrl).read
+
+  jobDetailUrl = JobUrl.new("https://www.jobnet.com.mm/#{link}")
+  detail_document = jobDetailUrl.url_to_document
   detail_data = Nokogiri::HTML(detail_document).css(".content-sidebar-wrapper")
     .css(".content-wrapper")
 
@@ -128,7 +129,7 @@ while running
   +             Did you want to continue.....Choose one               +
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
   ".red
-  
+
   puts "0. Quite Program"
   puts "1. Restart program"
 

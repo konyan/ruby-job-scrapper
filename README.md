@@ -22,7 +22,6 @@
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
 - [Unit Testing](#unittesting)
-- [Usage](#usage)
 - [Contributing](#contributing)
 - [License](#license)
 - [Contact](#contact)
@@ -95,6 +94,8 @@ gem install
 ```ruby
 ruby bin/main.rb
 ```
+
+<!-- UNIT TESTING -->
 
 ## Unit Testing
 

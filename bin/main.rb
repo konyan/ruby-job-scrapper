@@ -96,17 +96,12 @@ while running
 
   jobDetailUrl = JobUrl.new("https://www.jobnet.com.mm/#{link}")
   detail_document = jobDetailUrl.url_to_document
-  detail_data = Nokogiri::HTML(detail_document).css(".content-sidebar-wrapper")
-    .css(".content-wrapper")
 
-  jobTitle = detail_data.css(".job-info-wrapper").css(".job-detail-header")
-    .css("h1").inner_html
-  jobCompany = detail_data.css(".job-info-wrapper").css(".job-detail-header")
-    .css("h2").css("a").css("span").inner_html
-  postedDate = detail_data.css(".job-info-wrapper").css(".footer")
-    .css(".post-date")
-  jobDescription = detail_data.css(".job-description-wrapper").css(".description-item").first.css("div").css("p").inner_html.strip
-  jobRequirement = detail_data.css(".job-description-wrapper").css(".description-item:nth-child(3)").css("p").inner_html.strip
+  selectJob = Job.new(detail_document)
+  jobTitle = selectJob.title
+  jobCompany = selectJob.company
+  jobDescription = selectJob.description
+  jobRequirement = selectJob.requirement
 
   puts "
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
@@ -117,12 +112,12 @@ while running
   puts "
   Job Description
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-  #{jobDescription.gsub(/<br\s*\/?>/, "\n").gsub(/•\s*/, "• ").gsub(/-\s*/, "- ").gsub(/\s*/, " ")}
+  #{jobDescription}
   "
   puts "
   Job Requirements
   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
-  #{jobRequirement.gsub(/<br\s*\/?>/, "\n").gsub(/\s*/, " ").gsub(/•\s*/, "• ").gsub(/-\s*/, "- ")}
+  #{jobRequirement}
   "
 
   sleep 10

@@ -22,6 +22,8 @@
   - [Prerequisites](#prerequisites)
   - [Installation](#installation)
 - [Unit Testing](#unittesting)
+  - [Prerequisites](#prerequisites)
+  - [Installation](#installation)
 - [Contributing](#contributing)
 - [License](#license)
 - [Contact](#contact)
@@ -98,6 +100,26 @@ ruby bin/main.rb
 <!-- UNIT TESTING -->
 
 ## Unit Testing
+
+### Prerequisites
+
+This is an example of how to list things you need to use the software and how to install them.
+
+- ruby
+
+```sh
+gem install rspec
+```
+
+### Installation
+
+1. Run spec files at Spec Folder
+
+```ruby
+rspec spec/job_spec.rb
+rspec spec/joburl_spec.rb
+rspec spec/position_spec.rb
+```
 
 <!-- CONTRIBUTING -->
 

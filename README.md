@@ -1,4 +1,7 @@
 <p align="center">
+ <a href="https://github.com/konyan/ruby-job-scrapper">
+    <img src="images/banner.png" alt="Logo" width="680" height="80">
+  </a>
   <h3 align="center">Console Jobs</h3>
 
   <p align="center">
@@ -29,7 +32,9 @@
 
 ## About The Project
 
-[[product-screenshot]](https://drive.google.com/file/d/1BiyjkW26crRbp1rrt2InRIPAJJzIl0UK/view?usp=sharing)
+<a href="https://github.com/konyan/ruby-job-scrapper">
+    <img src="images/program.png" alt="Logo" width="800" height="1000">
+  </a>
 
 This is capstone project of Microverse Ruby Curriculum.Project Name is **Console Jobs**.
 Web scraping is the process of gathering information from the Internet. Even copy-pasting the lyrics of your favorite song is a form of web scraping! However, the words “web scraping” usually refer to a process that involves automation.
@@ -92,7 +97,6 @@ ruby bin/main.rb
 ```
 
 ## Unit Testing
-
 
 <!-- CONTRIBUTING -->
 

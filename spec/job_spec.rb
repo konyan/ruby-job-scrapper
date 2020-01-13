@@ -1,25 +1,23 @@
 require "job"
+require "joburl.rb"
 
 RSpec.describe Job do
-  let(:job) { Job.new("Ruby Job", "It is description", "It is requirement", "Ruby", "male") }
+  let(:jobUrl) { JobUrl.new("https://www.jobnet.com.mm/job-details/customer-development-manager-colgate-palmolive-myanmar-ltd/43758") }
+  let(:job) { Job.new(jobUrl.url_to_document) }
 
   it "has a title" do
-    expect(job.title).to eq("Ruby Job")
+    expect(job.title).to eq("Customer Development Manager")
   end
 
   it "has a Job description" do
-    expect(job.description).to eq("It is description")
+    expect(job.description).to include("Category Management")
   end
 
   it "has a Job requirement" do
-    expect(job.requirement).to eq("It is requirement")
+    expect(job.requirement).to include("Job Purpose")
   end
 
   it "has background company name" do
-    expect(job.company_name).to eq("Ruby")
-  end
-
-  it "acceptance gender" do
-    expect(job.accept_gender).to eq("male")
+    expect(job.company).to eq("Colgate Palmolive (Myanmar) Ltd.")
   end
 end

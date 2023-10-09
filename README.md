@@ -8,7 +8,6 @@
     A Web Scraper is a program that quite literally scrapes or gathers data off of job's website. 
     <br />
     <br />
-    <a href="https://github.com/othneildrew/Best-README-Template">View Demo</a>
   </p>
 </p>
 
